@@ -9,3 +9,5 @@ You're welcome to download, fork or do whatever else legal with all the files! T
 ### 1 Intro, Notes & Section 3 Assets ###
 
 + Start
+
+### 2 Game Design Document (GDD) ###
