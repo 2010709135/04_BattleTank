@@ -24,6 +24,9 @@ void ATankAIController::Tick(float DeltaTime) {
 		// Aim toward the player
 		AimingComponent->AimAt(PlayerTank->GetActorLocation());
 		// Fire if ready
-		AimingComponent->Fire(); // TODO limit firing rate
+		//UE_LOG(LogTemp, Warning, TEXT("DONKEY : %s Tick"), *GetOwner()->GetName())
+
+		if(AimingComponent->GetFiringState() == EFiringState::Locked)
+			AimingComponent->Fire(); // TODO limit firing rate
 	}
 }
