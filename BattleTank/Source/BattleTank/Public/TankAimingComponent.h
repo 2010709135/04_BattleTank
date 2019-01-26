@@ -6,8 +6,17 @@
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
 
+// Enum For Aming Colors
+UENUM()
+enum class EFiringState : uint8 {
+	Reloading,
+	Amiming,
+	Locked
+};
+
 class UTankBarrel;
 class UTankTurret;
+class AProjectile;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API UTankAimingComponent : public UActorComponent
@@ -19,19 +28,42 @@ public:
 	UTankAimingComponent();
 
 protected:
+	UPROPERTY(BlueprintReadonly, Category = "State")
+	EFiringState FiringState = EFiringState::Locked;
+
+
 
 public:	
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-	void SetTurretReference(UTankTurret* TurretToSet);
-	// TODO add turret reference
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Fire();
 
-	void AimAt(FVector HitLocation, float LaunchSpeed);
+	void AimAt(FVector HitLocation);
+
+
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBlueprint;
+
+
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float LaunchSpeed = 1000000; // Sensible starting value of 1000m/s
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float ReloadTimeInSeconds = 3;
+
+	double LastFireTime = 0;
+
+
 
 private:
+	void MoveBarrelToward(FVector AimDirection);
 
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 
-	void MoveBarrelToward(FVector AimDirection);
+
 };
